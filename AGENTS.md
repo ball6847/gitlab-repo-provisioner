@@ -13,6 +13,7 @@
 - **CLI Framework**: Use `@cliffy/command` for command-line interface
 - **Error Handling**: Use `typescript-result` (Result.ok(), Result.wrap(), Result.error()) - try-catch forbidden
 - **Environment**: Use `@std/dotenv` for environment variable management
+- **Required Environment Variables**: `GITLAB_TOKEN` and `GITLAB_ENDPOINT` must be set via env
 - **Control Flow**: Early-return/early-continue pattern preferred
 - **Imports**: Use explicit imports with .ts extension
 - **Naming**: camelCase for functions/variables, PascalCase for types/classes

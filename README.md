@@ -16,15 +16,22 @@ A Deno-based tool that configures existing GitLab repositories with preferred se
 - [Deno](https://deno.land/) runtime installed
 - GitLab access token with repository permissions
 - Existing GitLab repositories to configure
+- Environment variables: `GITLAB_TOKEN` and `GITLAB_ENDPOINT` must be set
 
 ## Configuration
 
 ### Environment Setup
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root with required environment variables:
+
 ```
 GITLAB_TOKEN=your_gitlab_access_token_here
+GITLAB_ENDPOINT=https://gitlab.com/api/v4  # or your GitLab instance URL
 ```
+
+**Required Environment Variables:**
+- `GITLAB_TOKEN` - Your GitLab personal access token
+- `GITLAB_ENDPOINT` - GitLab API endpoint (defaults to https://gitlab.com/api/v4 if not set)
 
 ### Repository Configuration
 
