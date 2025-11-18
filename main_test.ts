@@ -1,6 +1,6 @@
-import { assertEquals } from "@std/assert";
-import { add } from "./main.ts";
+// Example test for the GitLab Repository Provisioner
+import { assertEquals } from '@std/assert';
 
-Deno.test(function addTest() {
-  assertEquals(add(2, 3), 5);
+Deno.test('example test', () => {
+  assertEquals(1 + 1, 2);
 });

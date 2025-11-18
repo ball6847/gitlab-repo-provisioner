@@ -1,0 +1,21 @@
+# Example repositories configuration file
+repositories:
+  - path: mygroup/web-application
+    defaultBranch: develop
+    description: "Main web application repository"
+    visibility: private
+
+  - path: mygroup/api-service
+    defaultBranch: main
+    description: "API service repository with microservices architecture"
+    visibility: internal
+
+  - path: mygroup/mobile-app
+    defaultBranch: develop
+    description: "Mobile application repository"
+    visibility: private
+
+  - path: mygroup/documentation
+    defaultBranch: main
+    description: "Project documentation and guides"
+    visibility: public

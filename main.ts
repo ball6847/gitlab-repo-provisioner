@@ -1,8 +1,14 @@
-export function add(a: number, b: number): number {
-  return a + b;
+// Main entry point for the GitLab Repository Provisioner
+import { CliApplication } from './src/infrastructure/cli/CliApplication.ts';
+
+async function main(): Promise<void> {
+  const app = new CliApplication();
+  await app.run();
 }
 
-// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
 if (import.meta.main) {
-  console.log("Add 2 + 3 =", add(2, 3));
+  main().catch((error) => {
+    console.error('Fatal error:', error instanceof Error ? error.message : String(error));
+    Deno.exit(1);
+  });
 }
