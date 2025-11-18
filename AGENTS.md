@@ -16,7 +16,7 @@
 - **Required Environment Variables**: `GITLAB_TOKEN` and `GITLAB_ENDPOINT` must be set via env
 - **Control Flow**: Early-return/early-continue pattern preferred
 - **Imports**: Use explicit imports with .ts extension
-- **Naming**: camelCase for functions/variables, PascalCase for types/classes
+- **Naming**: camelCase for functions/variables, PascalCase for types/classes, snake_case for files/directories
 - **Types**: Strict TypeScript with explicit return types
 - **GitLab API**: Use `npm:gitlab` package for repository provisioning
 - **Default Branch**: Set to 'develop' when available during repository setup
