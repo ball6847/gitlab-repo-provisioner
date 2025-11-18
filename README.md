@@ -96,9 +96,10 @@ This project follows Clean Architecture principles with:
 
 ## How It Works
 
-1. **Load Configuration**: Reads repository settings from YAML file
-2. **Authenticate**: Uses `GITLAB_TOKEN` from environment
-3. **Sync Repositories**: For each repository in config:
+1. **Load Environment**: Reads `GITLAB_TOKEN` and `GITLAB_ENDPOINT` from environment
+2. **Load Configuration**: Reads repository settings from YAML file
+3. **Authenticate**: Connects to GitLab using provided token and endpoint
+4. **Sync Repositories**: For each repository in config:
    - Verifies repository exists
    - Updates default branch to specified value
    - Reports success/failure for each operation
@@ -132,7 +133,7 @@ Uses `npm:typescript-result` for functional error handling:
 
 Key dependencies added via `deno add`:
 - `@cliffy/command` - Command-line interface framework
-- `@std/dotenv` - Environment variable management
+- `@std/dotenv` - Environment variable management (for GITLAB_TOKEN, GITLAB_ENDPOINT)
 - `@std/async` - Async utilities
 - `typescript-result` - Functional error handling
 - `npm:gitlab` - GitLab API client
@@ -141,7 +142,7 @@ Key dependencies added via `deno add`:
 
 - ✅ Read repository configurations from YAML file
 - ✅ Accept config file path via command line argument (`--config`)
-- ✅ Load `GITLAB_TOKEN` from environment (dotenv support)
+- ✅ Load `GITLAB_TOKEN` and `GITLAB_ENDPOINT` from environment (dotenv support)
 - ✅ Expose single `sync` command
 - ✅ Set default branch for existing repositories only
 - ✅ Process repositories one-by-one from YAML list
