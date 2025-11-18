@@ -45,6 +45,10 @@ repositories:
 # Sync repositories with configuration
 deno run --allow-net --allow-env --allow-read main.ts sync --config repositories.yml
 
+# Get help
+deno run --allow-net --allow-env --allow-read main.ts --help
+deno run --allow-net --allow-env --allow-read main.ts sync --help
+
 # Development mode with auto-reload
 deno task dev
 ```
@@ -66,15 +70,22 @@ deno lint
 
 # Format code
 deno fmt
+
+# Example usage
+deno run --allow-net --allow-env --allow-read main.ts sync --config repositories.yml
 ```
 
 ## Architecture
 
 This project follows Clean Architecture principles with:
-- Domain layer for business logic
-- Infrastructure layer for external services (GitLab API)
-- Application layer for use cases
-- Explicit error handling without try-catch
+- **Domain layer**: Business logic for repository configuration
+- **Infrastructure layer**: GitLab API client and YAML configuration reader
+- **Application layer**: Sync use case orchestration
+- **CLI layer**: Command-line interface built with `@cliffy/command`
+- **Configuration**: YAML-based repository settings
+- **Environment**: Secure token management with `@std/dotenv`
+- **Error Handling**: Functional error handling with `typescript-result`
+- **Async Operations**: Enhanced with `@std/async` utilities
 
 ## How It Works
 
@@ -87,9 +98,15 @@ This project follows Clean Architecture principles with:
 
 ## Command Line Interface
 
+Built with `@cliffy/command` for robust CLI experience:
+
 ```bash
 # Main command - sync repositories
 main.ts sync --config <path-to-yml>
+
+# Get help
+main.ts --help
+main.ts sync --help
 
 # Required permissions:
 # --allow-net     : GitLab API access
@@ -103,6 +120,33 @@ Uses `npm:typescript-result` for functional error handling:
 - `Result.ok()` for successful operations
 - `Result.error()` for failures
 - `Result.wrap()` for safe execution
+
+## Dependencies
+
+Key dependencies added via `deno add`:
+- `@cliffy/command` - Command-line interface framework
+- `@std/dotenv` - Environment variable management
+- `@std/async` - Async utilities
+- `typescript-result` - Functional error handling
+- `npm:gitlab` - GitLab API client
+
+## Requirements (Temporary PRD)
+
+- ✅ Read repository configurations from YAML file
+- ✅ Accept config file path via command line argument (`--config`)
+- ✅ Load `GITLAB_TOKEN` from environment (dotenv support)
+- ✅ Expose single `sync` command
+- ✅ Set default branch for existing repositories only
+- ✅ Process repositories one-by-one from YAML list
+- ✅ Report success/failure for each repository
+- ✅ Do not create repositories - only configure existing ones
+
+## Example Workflow
+
+1. Create `.env` with your GitLab token
+2. Create `repositories.yml` with your repo configurations
+3. Run: `deno run --allow-net --allow-env --allow-read main.ts sync --config repositories.yml`
+4. Tool will update default branches for all listed repositories
 
 ## License
 
