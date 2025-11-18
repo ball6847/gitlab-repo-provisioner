@@ -3,7 +3,7 @@ export interface RepositoryConfigDto {
   path: string;
   defaultBranch: string;
   description?: string;
-  visibility?: 'private' | 'internal' | 'public';
+  visibility?: "private" | "internal" | "public";
 }
 
 export interface RepositoryConfigurationDto {

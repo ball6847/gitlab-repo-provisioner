@@ -1,25 +1,25 @@
 // Domain entity representing a GitLab repository configuration
-import { BranchName } from '../valueObjects/BranchName.ts';
-import { ProjectPath } from '../valueObjects/ProjectPath.ts';
+import { BranchName } from "../valueobjects/branch_name.ts";
+import { ProjectPath } from "../valueobjects/project_path.ts";
 
 export interface RepositoryConfigProps {
   path: ProjectPath;
   defaultBranch: BranchName;
   description?: string;
-  visibility?: 'private' | 'internal' | 'public';
+  visibility?: "private" | "internal" | "public";
 }
 
 export class Repository {
   private readonly path: ProjectPath;
   private readonly defaultBranch: BranchName;
   private readonly description?: string;
-  private readonly visibility: 'private' | 'internal' | 'public';
+  private readonly visibility: "private" | "internal" | "public";
 
   constructor(props: RepositoryConfigProps) {
     this.path = props.path;
     this.defaultBranch = props.defaultBranch;
     this.description = props.description;
-    this.visibility = props.visibility || 'private';
+    this.visibility = props.visibility || "private";
   }
 
   getPath(): ProjectPath {
@@ -34,7 +34,7 @@ export class Repository {
     return this.description;
   }
 
-  getVisibility(): 'private' | 'internal' | 'public' {
+  getVisibility(): "private" | "internal" | "public" {
     return this.visibility;
   }
 

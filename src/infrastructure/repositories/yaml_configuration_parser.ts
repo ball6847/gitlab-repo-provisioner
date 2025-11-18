@@ -1,19 +1,23 @@
 // YAML configuration parser
-import { RepositoryConfigurationDto } from '../../application/dto/RepositoryDto.ts';
+import { RepositoryConfigurationDto } from "../../application/dto/repository_dto.ts";
 
 export class YamlConfigurationParser {
   parse(content: string): RepositoryConfigurationDto {
     try {
       // Using Deno's built-in YAML parser
       const data = this.parseYaml(content);
-      
+
       if (!this.isValidConfiguration(data)) {
-        throw new Error('Invalid configuration format');
+        throw new Error("Invalid configuration format");
       }
 
       return this.transformToDto(data);
     } catch (error) {
-      throw new Error(`Failed to parse YAML configuration: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to parse YAML configuration: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
+      );
     }
   }
 
@@ -31,21 +35,25 @@ export class YamlConfigurationParser {
 
   private convertYamlToJson(yaml: string): Record<string, unknown> {
     const result: Record<string, unknown> = {};
-    const lines = yaml.split('\n');
+    const lines = yaml.split("\n");
     let inRepositories = false;
     const repositories: unknown[] = [];
 
     for (const line of lines) {
       const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) continue;
+      if (!trimmed || trimmed.startsWith("#")) continue;
 
-      if (trimmed === 'repositories:') {
+      if (trimmed === "repositories:") {
         inRepositories = true;
         continue;
       }
 
-      if (inRepositories && trimmed.startsWith('- ')) {
-        const repoData = this.parseRepositoryItem(trimmed, lines, lines.indexOf(line));
+      if (inRepositories && trimmed.startsWith("- ")) {
+        const repoData = this.parseRepositoryItem(
+          trimmed,
+          lines,
+          lines.indexOf(line),
+        );
         repositories.push(repoData);
       }
     }
@@ -57,9 +65,13 @@ export class YamlConfigurationParser {
     return result;
   }
 
-  private parseRepositoryItem(startLine: string, allLines: string[], startIndex: number): Record<string, unknown> {
+  private parseRepositoryItem(
+    startLine: string,
+    allLines: string[],
+    startIndex: number,
+  ): Record<string, unknown> {
     const repo: Record<string, unknown> = {};
-    
+
     // Parse the first line (starts with "- ")
     const firstLine = startLine.substring(2).trim();
     if (firstLine) {
@@ -70,10 +82,10 @@ export class YamlConfigurationParser {
     for (let i = startIndex + 1; i < allLines.length; i++) {
       const line = allLines[i];
       const trimmed = line.trim();
-      
-      if (!trimmed || trimmed.startsWith('#')) continue;
-      if (!line.startsWith('  ') && !line.startsWith('\t')) break; // Not indented, end of this repository
-      
+
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      if (!line.startsWith("  ") && !line.startsWith("\t")) break; // Not indented, end of this repository
+
       this.parseKeyValue(trimmed, repo);
     }
 
@@ -81,45 +93,58 @@ export class YamlConfigurationParser {
   }
 
   private parseKeyValue(line: string, target: Record<string, unknown>): void {
-    const colonIndex = line.indexOf(':');
+    const colonIndex = line.indexOf(":");
     if (colonIndex === -1) return;
 
     const key = line.substring(0, colonIndex).trim();
     const value = line.substring(colonIndex + 1).trim();
-    
+
     // Remove quotes if present
-    if ((value.startsWith('"') && value.endsWith('"')) || 
-        (value.startsWith("'") && value.endsWith("'"))) {
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
       target[key] = value.substring(1, value.length - 1);
-    } else if (value === '') {
+    } else if (value === "") {
       target[key] = undefined;
     } else {
       target[key] = value;
     }
   }
 
-  private isValidConfiguration(data: unknown): data is { repositories: unknown[] } {
+  private isValidConfiguration(
+    data: unknown,
+  ): data is { repositories: unknown[] } {
     return (
-      typeof data === 'object' &&
+      typeof data === "object" &&
       data !== null &&
-      'repositories' in data &&
+      "repositories" in data &&
       Array.isArray((data as { repositories: unknown[] }).repositories)
     );
   }
 
-  private transformToDto(data: { repositories: unknown[] }): RepositoryConfigurationDto {
+  private transformToDto(
+    data: { repositories: unknown[] },
+  ): RepositoryConfigurationDto {
     const repositories = data.repositories.map((repo, index) => {
       if (!this.isValidRepositoryConfig(repo)) {
         throw new Error(`Invalid repository configuration at index ${index}`);
       }
 
-      const visibility = repo.visibility as 'private' | 'internal' | 'public' | undefined;
-      
+      const visibility = repo.visibility as
+        | "private"
+        | "internal"
+        | "public"
+        | undefined;
+
       return {
         path: repo.path,
         defaultBranch: repo.defaultBranch,
         description: repo.description,
-        visibility: visibility && ['private', 'internal', 'public'].includes(visibility) ? visibility : undefined,
+        visibility:
+          visibility && ["private", "internal", "public"].includes(visibility)
+            ? visibility
+            : undefined,
       };
     });
 
@@ -133,12 +158,12 @@ export class YamlConfigurationParser {
     visibility?: string;
   } {
     return (
-      typeof repo === 'object' &&
+      typeof repo === "object" &&
       repo !== null &&
-      'path' in repo &&
-      'defaultBranch' in repo &&
-      typeof (repo as { path: unknown }).path === 'string' &&
-      typeof (repo as { defaultBranch: unknown }).defaultBranch === 'string'
+      "path" in repo &&
+      "defaultBranch" in repo &&
+      typeof (repo as { path: unknown }).path === "string" &&
+      typeof (repo as { defaultBranch: unknown }).defaultBranch === "string"
     );
   }
 }

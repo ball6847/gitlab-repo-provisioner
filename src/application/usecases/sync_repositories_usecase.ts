@@ -1,10 +1,10 @@
 // Use case for synchronizing repository configurations
-import { Repository } from '../../domain/entities/Repository.ts';
-import { RepositoryConfiguration } from '../../domain/entities/RepositoryConfiguration.ts';
-import { IGitLabRepository } from '../../domain/repositories/IGitLabRepository.ts';
-import { BranchName } from '../../domain/valueObjects/BranchName.ts';
-import { ProjectPath } from '../../domain/valueObjects/ProjectPath.ts';
-import { RepositoryConfigurationDto } from '../dto/RepositoryDto.ts';
+import { Repository } from "../../domain/entities/repository.ts";
+import { RepositoryConfiguration } from "../../domain/entities/repository_configuration.ts";
+import { IGitLabRepository } from "../../domain/repositories/gitlab_repository.ts";
+import { BranchName } from "../../domain/valueobjects/branch_name.ts";
+import { ProjectPath } from "../../domain/valueobjects/project_path.ts";
+import { RepositoryConfigurationDto } from "../dto/repository_dto.ts";
 
 export interface SyncResult {
   totalRepositories: number;
@@ -25,7 +25,7 @@ export class SyncRepositoriesUseCase {
 
     // Validate configuration
     if (!configuration.hasUniquePaths()) {
-      throw new Error('Configuration contains duplicate repository paths');
+      throw new Error("Configuration contains duplicate repository paths");
     }
 
     const result: SyncResult = {
@@ -55,11 +55,13 @@ export class SyncRepositoriesUseCase {
     return result;
   }
 
-  private createDomainEntities(config: RepositoryConfigurationDto): Repository[] {
-    return config.repositories.map(repoConfig => {
+  private createDomainEntities(
+    config: RepositoryConfigurationDto,
+  ): Repository[] {
+    return config.repositories.map((repoConfig) => {
       const path = ProjectPath.create(repoConfig.path);
       const defaultBranch = BranchName.create(repoConfig.defaultBranch);
-      
+
       return new Repository({
         path,
         defaultBranch,
@@ -69,13 +71,17 @@ export class SyncRepositoriesUseCase {
     });
   }
 
-  private async processRepository(repository: Repository): Promise<{ updated: boolean }> {
+  private async processRepository(
+    repository: Repository,
+  ): Promise<{ updated: boolean }> {
     const projectPath = repository.getFullPath();
 
     // Check if repository exists
     const existsResult = await this.gitlabRepository.exists(projectPath);
     if (!existsResult.success) {
-      throw new Error(`Failed to check repository existence: ${existsResult.error?.message}`);
+      throw new Error(
+        `Failed to check repository existence: ${existsResult.error?.message}`,
+      );
     }
 
     if (!existsResult.data) {
@@ -83,9 +89,13 @@ export class SyncRepositoriesUseCase {
     }
 
     // Get current default branch
-    const branchResult = await this.gitlabRepository.getDefaultBranch(projectPath);
+    const branchResult = await this.gitlabRepository.getDefaultBranch(
+      projectPath,
+    );
     if (!branchResult.success || !branchResult.data) {
-      throw new Error(`Failed to get default branch: ${branchResult.error?.message}`);
+      throw new Error(
+        `Failed to get default branch: ${branchResult.error?.message}`,
+      );
     }
 
     const currentBranch = branchResult.data;
@@ -97,9 +107,14 @@ export class SyncRepositoriesUseCase {
     }
 
     // Update default branch
-    const updateResult = await this.gitlabRepository.updateDefaultBranch(projectPath, desiredBranch);
+    const updateResult = await this.gitlabRepository.updateDefaultBranch(
+      projectPath,
+      desiredBranch,
+    );
     if (!updateResult.success) {
-      throw new Error(`Failed to update default branch: ${updateResult.error?.message}`);
+      throw new Error(
+        `Failed to update default branch: ${updateResult.error?.message}`,
+      );
     }
 
     return { updated: true };

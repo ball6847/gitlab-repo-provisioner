@@ -1,5 +1,5 @@
 // Configuration aggregate for repository provisioning
-import { Repository } from '../entities/Repository.ts';
+import { Repository } from "../entities/repository.ts";
 
 export class RepositoryConfiguration {
   private readonly repositories: Repository[];
@@ -15,7 +15,7 @@ export class RepositoryConfiguration {
   }
 
   getRepositoryByPath(path: string): Repository | undefined {
-    return this.repositories.find(repo => repo.getFullPath() === path);
+    return this.repositories.find((repo) => repo.getFullPath() === path);
   }
 
   getTimestamp(): Date {
@@ -28,14 +28,14 @@ export class RepositoryConfiguration {
 
   // Business rule: Validate that all repositories have unique paths
   hasUniquePaths(): boolean {
-    const paths = this.repositories.map(repo => repo.getFullPath());
+    const paths = this.repositories.map((repo) => repo.getFullPath());
     const uniquePaths = new Set(paths);
     return paths.length === uniquePaths.size;
   }
 
   // Get all unique namespaces
   getUniqueNamespaces(): string[] {
-    const namespaces = this.repositories.map(repo => repo.getNamespace());
+    const namespaces = this.repositories.map((repo) => repo.getNamespace());
     return [...new Set(namespaces)];
   }
 }

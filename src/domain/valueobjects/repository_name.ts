@@ -1,5 +1,5 @@
 // Value Object for repository names with validation
-import { DomainError } from '../errors.ts';
+import { DomainError } from "../errors.ts";
 
 export class RepositoryName {
   private readonly value: string;
@@ -10,7 +10,7 @@ export class RepositoryName {
 
   static create(value: string): RepositoryName {
     if (!value || value.trim().length === 0) {
-      throw new DomainError('Repository name cannot be empty');
+      throw new DomainError("Repository name cannot be empty");
     }
 
     // GitLab repository name validation

@@ -1,16 +1,24 @@
 # GitLab Repository Provisioner
 
-A high-quality, open-source CLI tool for synchronizing GitLab repository configurations. Built with TypeScript and Deno, following Clean Architecture principles.
+A high-quality, open-source CLI tool for synchronizing GitLab repository
+configurations. Built with TypeScript and Deno, following Clean Architecture
+principles.
 
 ## 🚀 Features
 
-- **Clean Architecture**: Well-structured codebase with clear separation of concerns
-- **YAML Configuration**: Define repository configurations in human-readable YAML
-- **Repository Validation**: Validate repository paths, branch names, and visibility settings
+- **Clean Architecture**: Well-structured codebase with clear separation of
+  concerns
+- **YAML Configuration**: Define repository configurations in human-readable
+  YAML
+- **Repository Validation**: Validate repository paths, branch names, and
+  visibility settings
 - **Safe Operations**: Dry-run mode to preview changes before applying them
-- **Comprehensive Error Handling**: Detailed error messages and validation feedback
-- **GitLab API Integration**: Full integration with GitLab API for repository management
-- **Environment Configuration**: Support for `.env` files and environment variables
+- **Comprehensive Error Handling**: Detailed error messages and validation
+  feedback
+- **GitLab API Integration**: Full integration with GitLab API for repository
+  management
+- **Environment Configuration**: Support for `.env` files and environment
+  variables
 - **TypeScript**: Fully typed with strict TypeScript configuration
 
 ## 📋 Prerequisites
@@ -22,18 +30,21 @@ A high-quality, open-source CLI tool for synchronizing GitLab repository configu
 ## 🔧 Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/gitlab-repo-provisioner.git
 cd gitlab-repo-provisioner
 ```
 
 2. Create a `.env` file with your GitLab credentials:
+
 ```bash
 GITLAB_TOKEN=your_gitlab_personal_access_token
 GITLAB_ENDPOINT=https://gitlab.com  # Optional, defaults to gitlab.com
 ```
 
 3. Run the application:
+
 ```bash
 deno task start --help
 ```
@@ -60,16 +71,19 @@ repositories:
 ### Commands
 
 #### Validate Configuration
+
 ```bash
 deno task start validate --config repositories.yml
 ```
 
 #### Sync Repositories (Dry Run)
+
 ```bash
 deno task start sync --config repositories.yml --dry-run
 ```
 
 #### Sync Repositories
+
 ```bash
 deno task start sync --config repositories.yml
 ```
@@ -79,43 +93,53 @@ deno task start sync --config repositories.yml
 The project follows Clean Architecture principles with the following layers:
 
 ### Domain Layer (`src/domain/`)
+
 - **Entities**: Core business objects (`Repository`, `RepositoryConfiguration`)
-- **Value Objects**: Immutable value objects (`RepositoryName`, `BranchName`, `ProjectPath`)
+- **Value Objects**: Immutable value objects (`RepositoryName`, `BranchName`,
+  `ProjectPath`)
 - **Repositories**: Interfaces for external dependencies (`IGitLabRepository`)
 - **Errors**: Domain-specific error types
 
 ### Application Layer (`src/application/`)
-- **Use Cases**: Application business logic (`SyncRepositoriesUseCase`, `ValidateConfigurationUseCase`)
+
+- **Use Cases**: Application business logic (`SyncRepositoriesUseCase`,
+  `ValidateConfigurationUseCase`)
 - **DTOs**: Data transfer objects for input/output
 
 ### Infrastructure Layer (`src/infrastructure/`)
+
 - **Repositories**: External API implementations (`GitLabApiRepository`)
 - **Config**: Environment and configuration management
 - **CLI**: Command-line interface implementation
 - **Parsers**: YAML and other data format parsers
 
 ### Shared Layer (`src/shared/`)
+
 - **Result Types**: Functional error handling utilities
 - **Common Utilities**: Shared utilities and helpers
 
 ## 🧪 Development
 
 ### Running Tests
+
 ```bash
 deno task test
 ```
 
 ### Linting
+
 ```bash
 deno task lint
 ```
 
 ### Formatting
+
 ```bash
 deno task fmt
 ```
 
 ### Type Checking
+
 ```bash
 deno check main.ts
 ```
@@ -124,19 +148,19 @@ deno check main.ts
 
 ### Environment Variables
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `GITLAB_TOKEN` | ✅ | GitLab personal access token |
-| `GITLAB_ENDPOINT` | ❌ | GitLab instance URL (defaults to https://gitlab.com) |
+| Variable          | Required | Description                                          |
+| ----------------- | -------- | ---------------------------------------------------- |
+| `GITLAB_TOKEN`    | ✅       | GitLab personal access token                         |
+| `GITLAB_ENDPOINT` | ❌       | GitLab instance URL (defaults to https://gitlab.com) |
 
 ### Repository Configuration Format
 
 ```yaml
 repositories:
-  - path: namespace/project-name  # Required: GitLab project path
-    defaultBranch: branch-name    # Required: Default branch name
-    description: "Project description"  # Optional: Repository description
-    visibility: private           # Optional: private|internal|public (default: private)
+  - path: namespace/project-name # Required: GitLab project path
+    defaultBranch: branch-name # Required: Default branch name
+    description: "Project description" # Optional: Repository description
+    visibility: private # Optional: private|internal|public (default: private)
 ```
 
 ## 🛡️ Error Handling
@@ -174,21 +198,27 @@ The application implements comprehensive error handling:
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
+for details.
 
 ## 🙏 Acknowledgments
 
 - Built with [Deno](https://deno.land/) and TypeScript
 - Uses [Cliffy](https://cliffy.io/) for CLI framework
 - Integrates with [GitLab API](https://docs.gitlab.com/ee/api/)
-- Follows [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) principles
+- Follows
+  [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+  principles
 
 ## 📞 Support
 
 For issues and questions:
+
 1. Check the [documentation](README.md)
-2. Search [existing issues](https://github.com/yourusername/gitlab-repo-provisioner/issues)
-3. Create a [new issue](https://github.com/yourusername/gitlab-repo-provisioner/issues/new)
+2. Search
+   [existing issues](https://github.com/yourusername/gitlab-repo-provisioner/issues)
+3. Create a
+   [new issue](https://github.com/yourusername/gitlab-repo-provisioner/issues/new)
 
 ---
 

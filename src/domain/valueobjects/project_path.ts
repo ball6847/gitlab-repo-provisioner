@@ -1,5 +1,5 @@
 // Value Object for GitLab project paths (namespace/project)
-import { DomainError } from '../errors.ts';
+import { DomainError } from "../errors.ts";
 
 export class ProjectPath {
   private readonly value: string;
@@ -10,17 +10,19 @@ export class ProjectPath {
 
   static create(value: string): ProjectPath {
     if (!value || value.trim().length === 0) {
-      throw new DomainError('Project path cannot be empty');
+      throw new DomainError("Project path cannot be empty");
     }
 
     // GitLab project path validation: namespace/project
-    const parts = value.split('/');
+    const parts = value.split("/");
     if (parts.length !== 2) {
-      throw new DomainError(`Invalid project path format: ${value}. Expected format: namespace/project`);
+      throw new DomainError(
+        `Invalid project path format: ${value}. Expected format: namespace/project`,
+      );
     }
 
     const [namespace, project] = parts;
-    
+
     if (!namespace || !project) {
       throw new DomainError(`Invalid project path: ${value}`);
     }
@@ -39,11 +41,11 @@ export class ProjectPath {
   }
 
   getNamespace(): string {
-    return this.value.split('/')[0];
+    return this.value.split("/")[0];
   }
 
   getProjectName(): string {
-    return this.value.split('/')[1];
+    return this.value.split("/")[1];
   }
 
   equals(other: ProjectPath): boolean {

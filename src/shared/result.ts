@@ -30,7 +30,9 @@ export function wrap<T>(fn: () => T): Result<T, Error> {
 }
 
 // Async version of wrap
-export async function wrapAsync<T>(fn: () => Promise<T>): Promise<Result<T, Error>> {
+export async function wrapAsync<T>(
+  fn: () => Promise<T>,
+): Promise<Result<T, Error>> {
   try {
     return ok(await fn());
   } catch (error) {

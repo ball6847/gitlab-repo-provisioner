@@ -1,16 +1,35 @@
 // Mock GitLab API client implementation for demonstration
-import { Repository } from '../../domain/entities/Repository.ts';
-import { IGitLabRepository, RepositoryError, GitLabApiError } from '../../domain/repositories/IGitLabRepository.ts';
-import { BranchName } from '../../domain/valueObjects/BranchName.ts';
-import { ProjectPath } from '../../domain/valueObjects/ProjectPath.ts';
-import { EnvironmentConfiguration } from '../config/EnvironmentConfiguration.ts';
+import { Repository } from "../../domain/entities/repository.ts";
+import {
+  GitLabApiError,
+  IGitLabRepository,
+  RepositoryError,
+} from "../../domain/repositories/gitlab_repository.ts";
+import { BranchName } from "../../domain/valueobjects/branch_name.ts";
+import { ProjectPath } from "../../domain/valueobjects/project_path.ts";
+import { EnvironmentConfiguration } from "../config/environment_configuration.ts";
 
 export class GitLabApiRepository implements IGitLabRepository {
   // Mock data for demonstration
-  private mockProjects = new Map<string, { default_branch: string; description?: string; visibility: string }>([
-    ['mygroup/web-application', { default_branch: 'main', description: 'Web app', visibility: 'private' }],
-    ['mygroup/api-service', { default_branch: 'master', description: 'API service', visibility: 'internal' }],
-    ['mygroup/mobile-app', { default_branch: 'develop', description: 'Mobile app', visibility: 'private' }],
+  private mockProjects = new Map<
+    string,
+    { default_branch: string; description?: string; visibility: string }
+  >([
+    ["mygroup/web-application", {
+      default_branch: "main",
+      description: "Web app",
+      visibility: "private",
+    }],
+    ["mygroup/api-service", {
+      default_branch: "master",
+      description: "API service",
+      visibility: "internal",
+    }],
+    ["mygroup/mobile-app", {
+      default_branch: "develop",
+      description: "Mobile app",
+      visibility: "private",
+    }],
   ]);
 
   constructor() {
@@ -18,7 +37,9 @@ export class GitLabApiRepository implements IGitLabRepository {
     EnvironmentConfiguration.getInstance();
   }
 
-  async exists(projectPath: string): Promise<{ success: boolean; data?: boolean; error?: GitLabApiError }> {
+  async exists(
+    projectPath: string,
+  ): Promise<{ success: boolean; data?: boolean; error?: GitLabApiError }> {
     try {
       // Simulate async operation
       await Promise.resolve();
@@ -28,24 +49,26 @@ export class GitLabApiRepository implements IGitLabRepository {
       return {
         success: false,
         error: {
-          type: 'GitLabApiError',
-          message: error instanceof Error ? error.message : 'Unknown error',
+          type: "GitLabApiError",
+          message: error instanceof Error ? error.message : "Unknown error",
         },
       };
     }
   }
 
-  async getDefaultBranch(projectPath: string): Promise<{ success: boolean; data?: string; error?: RepositoryError }> {
+  async getDefaultBranch(
+    projectPath: string,
+  ): Promise<{ success: boolean; data?: string; error?: RepositoryError }> {
     try {
       // Simulate async operation
       await Promise.resolve();
       const project = this.mockProjects.get(projectPath);
-      
+
       if (!project) {
         return {
           success: false,
           error: {
-            type: 'RepositoryNotFoundError',
+            type: "RepositoryNotFoundError",
             message: `Repository not found: ${projectPath}`,
             projectPath,
           },
@@ -57,24 +80,27 @@ export class GitLabApiRepository implements IGitLabRepository {
       return {
         success: false,
         error: {
-          type: 'GitLabApiError',
-          message: error instanceof Error ? error.message : 'Unknown error',
+          type: "GitLabApiError",
+          message: error instanceof Error ? error.message : "Unknown error",
         },
       };
     }
   }
 
-  async updateDefaultBranch(projectPath: string, branch: string): Promise<{ success: boolean; error?: GitLabApiError }> {
+  async updateDefaultBranch(
+    projectPath: string,
+    branch: string,
+  ): Promise<{ success: boolean; error?: GitLabApiError }> {
     try {
       // Simulate async operation
       await Promise.resolve();
       const project = this.mockProjects.get(projectPath);
-      
+
       if (!project) {
         return {
           success: false,
           error: {
-            type: 'GitLabApiError',
+            type: "GitLabApiError",
             message: `Repository not found: ${projectPath}`,
           },
         };
@@ -87,24 +113,26 @@ export class GitLabApiRepository implements IGitLabRepository {
       return {
         success: false,
         error: {
-          type: 'GitLabApiError',
-          message: error instanceof Error ? error.message : 'Unknown error',
+          type: "GitLabApiError",
+          message: error instanceof Error ? error.message : "Unknown error",
         },
       };
     }
   }
 
-  async getRepository(projectPath: string): Promise<{ success: boolean; data?: Repository; error?: RepositoryError }> {
+  async getRepository(
+    projectPath: string,
+  ): Promise<{ success: boolean; data?: Repository; error?: RepositoryError }> {
     try {
       // Simulate async operation
       await Promise.resolve();
       const project = this.mockProjects.get(projectPath);
-      
+
       if (!project) {
         return {
           success: false,
           error: {
-            type: 'RepositoryNotFoundError',
+            type: "RepositoryNotFoundError",
             message: `Repository not found: ${projectPath}`,
             projectPath,
           },
@@ -113,21 +141,21 @@ export class GitLabApiRepository implements IGitLabRepository {
 
       const path = ProjectPath.create(projectPath);
       const defaultBranch = BranchName.create(project.default_branch);
-      
+
       const repository = new Repository({
         path,
         defaultBranch,
         description: project.description,
-        visibility: project.visibility as 'private' | 'internal' | 'public',
+        visibility: project.visibility as "private" | "internal" | "public",
       });
 
       return { success: true, data: repository };
     } catch (error: unknown) {
-      if (error instanceof Error && error.message.includes('Invalid')) {
+      if (error instanceof Error && error.message.includes("Invalid")) {
         return {
           success: false,
           error: {
-            type: 'GitLabApiError',
+            type: "GitLabApiError",
             message: error.message,
           },
         };
@@ -136,8 +164,8 @@ export class GitLabApiRepository implements IGitLabRepository {
       return {
         success: false,
         error: {
-          type: 'GitLabApiError',
-          message: error instanceof Error ? error.message : 'Unknown error',
+          type: "GitLabApiError",
+          message: error instanceof Error ? error.message : "Unknown error",
         },
       };
     }

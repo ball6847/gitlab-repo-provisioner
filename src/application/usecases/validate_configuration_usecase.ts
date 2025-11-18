@@ -1,7 +1,7 @@
 // Use case for validating repository configuration
-import { RepositoryConfigurationDto } from '../dto/RepositoryDto.ts';
-import { BranchName } from '../../domain/valueObjects/BranchName.ts';
-import { ProjectPath } from '../../domain/valueObjects/ProjectPath.ts';
+import { RepositoryConfigurationDto } from "../dto/repository_dto.ts";
+import { BranchName } from "../../domain/valueobjects/branch_name.ts";
+import { ProjectPath } from "../../domain/valueobjects/project_path.ts";
 
 export interface ValidationError {
   field: string;
@@ -20,16 +20,16 @@ export class ValidateConfigurationUseCase {
 
     if (!config.repositories || !Array.isArray(config.repositories)) {
       errors.push({
-        field: 'repositories',
-        message: 'Repositories must be an array',
+        field: "repositories",
+        message: "Repositories must be an array",
       });
       return { isValid: false, errors };
     }
 
     if (config.repositories.length === 0) {
       errors.push({
-        field: 'repositories',
-        message: 'At least one repository must be specified',
+        field: "repositories",
+        message: "At least one repository must be specified",
       });
     }
 
@@ -41,12 +41,12 @@ export class ValidateConfigurationUseCase {
       if (!repo.path) {
         errors.push({
           field: `repositories[${index}].path`,
-          message: 'Path is required',
+          message: "Path is required",
         });
       } else {
         try {
           ProjectPath.create(repo.path);
-          
+
           // Check for duplicates
           if (paths.has(repo.path)) {
             errors.push({
@@ -59,7 +59,9 @@ export class ValidateConfigurationUseCase {
         } catch (error) {
           errors.push({
             field: `repositories[${index}].path`,
-            message: error instanceof Error ? error.message : 'Invalid path format',
+            message: error instanceof Error
+              ? error.message
+              : "Invalid path format",
             value: repo.path,
           });
         }
@@ -69,7 +71,7 @@ export class ValidateConfigurationUseCase {
       if (!repo.defaultBranch) {
         errors.push({
           field: `repositories[${index}].defaultBranch`,
-          message: 'Default branch is required',
+          message: "Default branch is required",
         });
       } else {
         try {
@@ -77,17 +79,22 @@ export class ValidateConfigurationUseCase {
         } catch (error) {
           errors.push({
             field: `repositories[${index}].defaultBranch`,
-            message: error instanceof Error ? error.message : 'Invalid branch name',
+            message: error instanceof Error
+              ? error.message
+              : "Invalid branch name",
             value: repo.defaultBranch,
           });
         }
       }
 
       // Validate visibility if provided
-      if (repo.visibility && !['private', 'internal', 'public'].includes(repo.visibility)) {
+      if (
+        repo.visibility &&
+        !["private", "internal", "public"].includes(repo.visibility)
+      ) {
         errors.push({
           field: `repositories[${index}].visibility`,
-          message: 'Visibility must be one of: private, internal, public',
+          message: "Visibility must be one of: private, internal, public",
           value: repo.visibility,
         });
       }

@@ -20,11 +20,12 @@ export class EnvironmentConfiguration {
   }
 
   private loadConfig(): EnvironmentConfig {
-    const gitlabToken = Deno.env.get('GITLAB_TOKEN');
-    const gitlabEndpoint = Deno.env.get('GITLAB_ENDPOINT') || 'https://gitlab.com';
+    const gitlabToken = Deno.env.get("GITLAB_TOKEN");
+    const gitlabEndpoint = Deno.env.get("GITLAB_ENDPOINT") ||
+      "https://gitlab.com";
 
     if (!gitlabToken) {
-      throw new Error('GITLAB_TOKEN environment variable is required');
+      throw new Error("GITLAB_TOKEN environment variable is required");
     }
 
     return {
